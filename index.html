@@ -1,0 +1,1176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Placement Exam Preparation & Readiness Dashboard</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Chart.js for crisp, responsive data visualizations -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <!-- Google Fonts: Inter & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet" />
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace'],
+          },
+          colors: {
+            brand: {
+              50: '#eef2ff',
+              100: '#e0e7ff',
+              500: '#6366f1',
+              600: '#4f46e5',
+              700: '#4338ca',
+              900: '#312e81',
+            },
+            emerald: {
+              450: '#10b981',
+            }
+          }
+        }
+      }
+    };
+  </script>
+
+  <style>
+    /* Custom Range Slider Styling for smooth cross-browser tactile feel */
+    input[type="range"] {
+      -webkit-appearance: none;
+      appearance: none;
+      background: transparent;
+      cursor: pointer;
+    }
+
+    input[type="range"]::-webkit-slider-runnable-track {
+      height: 8px;
+      border-radius: 999px;
+      background: linear-gradient(to right, var(--track-color, #4f46e5) 0%, var(--track-color, #4f46e5) var(--fill-pct, 50%), #e2e8f0 var(--fill-pct, 50%), #e2e8f0 100%);
+    }
+
+    input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      margin-top: -6px;
+      height: 20px;
+      width: 20px;
+      border-radius: 50%;
+      background: #4f46e5;
+      border: 3px solid #ffffff;
+      box-shadow: 0 2px 6px rgba(79, 70, 229, 0.45);
+      transition: transform 0.15s ease, background-color 0.15s ease;
+    }
+
+    input[type="range"]:hover::-webkit-slider-thumb {
+      transform: scale(1.12);
+      background: #4338ca;
+    }
+
+    input[type="range"]:focus {
+      outline: none;
+    }
+
+    /* Custom slider accent variants */
+    input[type="range"].slider-emerald::-webkit-slider-thumb {
+      background: #059669;
+      box-shadow: 0 2px 6px rgba(5, 150, 105, 0.45);
+    }
+    input[type="range"].slider-amber::-webkit-slider-thumb {
+      background: #d97706;
+      box-shadow: 0 2px 6px rgba(217, 119, 6, 0.45);
+    }
+
+    /* Firefox Track & Thumb */
+    input[type="range"]::-moz-range-track {
+      height: 8px;
+      border-radius: 999px;
+      background: #e2e8f0;
+    }
+    input[type="range"]::-moz-range-thumb {
+      height: 20px;
+      width: 20px;
+      border-radius: 50%;
+      background: #4f46e5;
+      border: 3px solid #ffffff;
+      box-shadow: 0 2px 6px rgba(79, 70, 229, 0.45);
+    }
+
+    /* Subtle grid background for header */
+    .bg-grid-slate {
+      background-image: radial-gradient(#cbd5e1 1px, transparent 1px);
+      background-size: 20px 20px;
+    }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800 antialiased selection:bg-brand-100 selection:text-brand-900">
+
+  <!-- Top Navigation / Header Banner -->
+  <header class="bg-white border-b border-slate-200 sticky top-0 z-30 shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-brand-600 text-white flex items-center justify-center shadow-md shadow-brand-500/20 shrink-0">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+          </svg>
+        </div>
+        <div>
+          <div class="flex items-center gap-2 flex-wrap">
+            <h1 class="text-lg sm:text-xl font-bold text-slate-900 tracking-tight">Placement Prep &amp; Readiness Simulator</h1>
+            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-brand-50 text-brand-700 border border-brand-200">
+              8-Week Horizon
+            </span>
+          </div>
+          <p class="text-xs sm:text-sm text-slate-500">Aptitude • Logical Reasoning • Verbal • Technical | Target Benchmark: <span class="font-semibold text-slate-700">80% Readiness Index</span></p>
+        </div>
+      </div>
+
+      <!-- Quick Scenario Presets & Reset -->
+      <div class="flex flex-wrap items-center gap-2">
+        <span class="text-xs font-medium text-slate-400 uppercase tracking-wider mr-1 hidden md:inline">Presets:</span>
+        <button type="button" onclick="applyPreset('initial')" id="btn-preset-initial" class="preset-btn px-3 py-1.5 text-xs font-medium rounded-lg border border-brand-200 bg-brand-50 text-brand-800 hover:bg-brand-100 transition">
+          Initial (3h)
+        </button>
+        <button type="button" onclick="applyPreset('low')" id="btn-preset-low" class="preset-btn px-3 py-1.5 text-xs font-medium rounded-lg border border-slate-200 bg-white text-slate-700 hover:bg-slate-50 transition">
+          Low Prep
+        </button>
+        <button type="button" onclick="applyPreset('moderate')" id="btn-preset-moderate" class="preset-btn px-3 py-1.5 text-xs font-medium rounded-lg border border-emerald-200 bg-emerald-50 text-emerald-800 hover:bg-emerald-100 transition flex items-center gap-1">
+          <span>Moderate (Balanced)</span>
+          <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+        </button>
+        <button type="button" onclick="applyPreset('intensive')" id="btn-preset-intensive" class="preset-btn px-3 py-1.5 text-xs font-medium rounded-lg border border-slate-200 bg-white text-slate-700 hover:bg-slate-50 transition">
+          Intensive
+        </button>
+        <div class="h-5 w-px bg-slate-200 mx-1"></div>
+        <button type="button" onclick="resetToZero()" class="px-3 py-1.5 text-xs font-semibold rounded-lg bg-slate-900 text-white hover:bg-slate-800 active:scale-95 transition flex items-center gap-1.5 shadow-sm" title="Reset all inputs to 0">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+          </svg>
+          Reset to 0
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 space-y-6">
+
+    <!-- Epistemic Disclaimer Banner (Distinguishing Readiness Index from Predicted Exam Score) -->
+    <div class="bg-amber-50/90 border border-amber-200 rounded-xl p-4 flex items-start gap-3">
+      <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-amber-600 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+      </svg>
+      <div class="text-xs sm:text-sm text-amber-900 leading-relaxed">
+        <span class="font-semibold">Model Scope &amp; Metric Transparency:</span> Because baseline diagnostic mock scores are not yet logged, this model calculates a <span class="font-semibold underline decoration-amber-400">Preparation-Readiness Index (0–100)</span> rather than claiming an exact exam percentage. Reaching the <span class="font-semibold">80.0 Readiness Target</span> indicates optimal syllabus execution, error-correction discipline, and test calibration to compete for an 80%+ placement score.
+      </div>
+    </div>
+
+    <!-- Top Grid: Interactive Variable Controls (Left) + Readiness Gauge & KPI Summary (Right) -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+
+      <!-- LEFT COLUMN: 3 Interactive Variable Sliders -->
+      <section class="lg:col-span-5 bg-white rounded-2xl border border-slate-200 p-5 sm:p-6 shadow-sm flex flex-col justify-between space-y-6">
+        <div>
+          <div class="flex items-center justify-between mb-1">
+            <h2 class="text-base font-bold text-slate-900">1. Preparation Input Levers</h2>
+            <span id="active-strategy-badge" class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-brand-50 text-brand-700 border border-brand-200">
+              Custom / Initial Plan
+            </span>
+          </div>
+          <p class="text-xs text-slate-500 mb-5">Adjust your three core weekly habits to inspect compounding gains and diminishing returns.</p>
+
+          <div class="space-y-6">
+            <!-- Variable 1: Effective Practice Hours per Day -->
+            <div class="p-4 rounded-xl bg-slate-50 border border-slate-200/80 space-y-2.5">
+              <div class="flex items-center justify-between">
+                <label for="slider-hours" class="text-sm font-semibold text-slate-800 flex items-center gap-2">
+                  <span class="w-2.5 h-2.5 rounded-full bg-brand-600"></span>
+                  Effective Practice Hours / Day
+                </label>
+                <span id="val-hours" class="font-mono text-sm font-bold text-brand-700 bg-brand-50 px-2.5 py-0.5 rounded-md border border-brand-200">
+                  3.0 hrs/day
+                </span>
+              </div>
+              <input id="slider-hours" type="range" min="0" max="6" step="0.5" value="3" style="--track-color: #4f46e5;" class="w-full" />
+              <div class="flex justify-between text-[11px] font-mono text-slate-500">
+                <button type="button" onclick="setSlider('slider-hours', 0)" class="hover:text-brand-600">0h (None)</button>
+                <button type="button" onclick="setSlider('slider-hours', 3)" class="hover:text-brand-600 font-semibold">3.0h (Target)</button>
+                <button type="button" onclick="setSlider('slider-hours', 4.5)" class="hover:text-brand-600">4.5h (Peak)</button>
+                <button type="button" onclick="setSlider('slider-hours', 6)" class="hover:text-brand-600">6.0h (Max)</button>
+              </div>
+              <p id="feedback-hours" class="text-xs text-slate-600 leading-relaxed pt-1">
+                Optimal cognitive focus window. Sustains high active problem-solving across Aptitude &amp; Tech without burnout.
+              </p>
+            </div>
+
+            <!-- Variable 2: Post-Practice Analysis Ratio (%) -->
+            <div class="p-4 rounded-xl bg-slate-50 border border-slate-200/80 space-y-2.5">
+              <div class="flex items-center justify-between">
+                <label for="slider-analysis" class="text-sm font-semibold text-slate-800 flex items-center gap-2">
+                  <span class="w-2.5 h-2.5 rounded-full bg-emerald-600"></span>
+                  Post-Practice Analysis Ratio
+                </label>
+                <span id="val-analysis" class="font-mono text-sm font-bold text-emerald-700 bg-emerald-50 px-2.5 py-0.5 rounded-md border border-emerald-200">
+                  30%
+                </span>
+              </div>
+              <input id="slider-analysis" type="range" min="0" max="60" step="5" value="30" style="--track-color: #059669;" class="w-full slider-emerald" />
+              <div class="flex justify-between text-[11px] font-mono text-slate-500">
+                <button type="button" onclick="setSlider('slider-analysis', 0)" class="hover:text-emerald-600">0% (None)</button>
+                <button type="button" onclick="setSlider('slider-analysis', 35)" class="hover:text-emerald-600 font-semibold">35% (Sweet Spot)</button>
+                <button type="button" onclick="setSlider('slider-analysis', 60)" class="hover:text-emerald-600">60% (Max)</button>
+              </div>
+              <p id="feedback-analysis" class="text-xs text-slate-600 leading-relaxed pt-1">
+                Healthy error-log habit: ~30% of your time dissects wrong answers, reinforcing pattern retention.
+              </p>
+            </div>
+
+            <!-- Variable 3: Weekly Mock + Sectional Test Frequency -->
+            <div class="p-4 rounded-xl bg-slate-50 border border-slate-200/80 space-y-2.5">
+              <div class="flex items-center justify-between">
+                <label for="slider-mocks" class="text-sm font-semibold text-slate-800 flex items-center gap-2">
+                  <span class="w-2.5 h-2.5 rounded-full bg-amber-600"></span>
+                  Weekly Mock + Sectional Tests
+                </label>
+                <span id="val-mocks" class="font-mono text-sm font-bold text-amber-700 bg-amber-50 px-2.5 py-0.5 rounded-md border border-amber-200">
+                  2.0 tests/wk
+                </span>
+              </div>
+              <input id="slider-mocks" type="range" min="0" max="5" step="0.5" value="2" style="--track-color: #d97706;" class="w-full slider-amber" />
+              <div class="flex justify-between text-[11px] font-mono text-slate-500">
+                <button type="button" onclick="setSlider('slider-mocks', 0)" class="hover:text-amber-600">0 (None)</button>
+                <button type="button" onclick="setSlider('slider-mocks', 2.5)" class="hover:text-amber-600 font-semibold">2.5 (Ideal)</button>
+                <button type="button" onclick="setSlider('slider-mocks', 5)" class="hover:text-amber-600">5.0 (Max)</button>
+              </div>
+              <p id="feedback-mocks" class="text-xs text-slate-600 leading-relaxed pt-1">
+                Balanced calibration: builds sectional pacing and negative-marking discipline while leaving time to study.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Interactive Section Focus Filter -->
+        <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200/80 space-y-2">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-semibold text-slate-700">Target Assessment Section Focus:</span>
+            <span id="section-focus-tip" class="text-[11px] font-mono text-brand-600">All 4 Sections Balanced</span>
+          </div>
+          <div class="grid grid-cols-4 gap-1.5" id="section-pills">
+            <button type="button" onclick="selectSection('all')" data-sec="all" class="sec-btn px-2 py-1.5 rounded-lg text-[11px] font-semibold bg-brand-600 text-white shadow-sm transition">All (4)</button>
+            <button type="button" onclick="selectSection('aptitude')" data-sec="aptitude" class="sec-btn px-2 py-1.5 rounded-lg text-[11px] font-medium bg-white text-slate-600 border border-slate-200 hover:bg-slate-100 transition">Aptitude</button>
+            <button type="button" onclick="selectSection('logical')" data-sec="logical" class="sec-btn px-2 py-1.5 rounded-lg text-[11px] font-medium bg-white text-slate-600 border border-slate-200 hover:bg-slate-100 transition">Logical</button>
+            <button type="button" onclick="selectSection('technical')" data-sec="technical" class="sec-btn px-2 py-1.5 rounded-lg text-[11px] font-medium bg-white text-slate-600 border border-slate-200 hover:bg-slate-100 transition">Technical</button>
+          </div>
+        </div>
+
+        <!-- Dynamic Diagnostic Alert inside Control Panel -->
+        <div id="diagnostic-callout" class="p-3.5 rounded-xl bg-brand-50/70 border border-brand-200 text-xs text-brand-900 flex items-start gap-2.5">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-brand-600 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+          </svg>
+          <span id="diagnostic-text">Your current settings achieve steady weekly compounding. Increasing Analysis Ratio to 35% boosts efficiency without adding extra hours.</span>
+        </div>
+      </section>
+
+      <!-- RIGHT COLUMN: Readiness Index Gauge, Progress Bar & 4 Calculated Preparation KPIs -->
+      <section class="lg:col-span-7 flex flex-col gap-6">
+
+        <!-- Hero Target Progress Card -->
+        <div class="bg-white rounded-2xl border border-slate-200 p-5 sm:p-6 shadow-sm">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-5 border-b border-slate-100">
+            <div>
+              <span class="text-xs font-bold uppercase tracking-wider text-brand-600">8-Week Projected Outcome</span>
+              <h2 class="text-xl sm:text-2xl font-extrabold text-slate-900 mt-0.5">Preparation-Readiness Index</h2>
+              <p class="text-xs text-slate-500 mt-1">Composite index weighted across Input Volume (35%), Learning Efficiency (40%), and Exam Calibration (25%).</p>
+            </div>
+            <div class="flex items-baseline gap-2 bg-slate-900 text-white px-4 py-3 rounded-xl shrink-0 self-start sm:self-center shadow-md">
+              <span id="kpi-readiness-score" class="font-mono text-3xl sm:text-4xl font-extrabold tracking-tight">78.4</span>
+              <span class="font-mono text-sm text-slate-400">/ 100</span>
+            </div>
+          </div>
+
+          <!-- Visual Progress Bar toward 80% Target -->
+          <div class="mt-5 space-y-2">
+            <div class="flex items-center justify-between text-xs font-semibold">
+              <span class="text-slate-600">Progress Toward 80.0 Readiness Benchmark</span>
+              <span id="target-status-label" class="font-mono text-amber-600">-1.6 pts below 80.0 target</span>
+            </div>
+
+            <div class="relative h-6 bg-slate-100 rounded-full overflow-hidden border border-slate-200 p-0.5">
+              <!-- Animated Progress Fill -->
+              <div id="readiness-progress-bar" class="h-full rounded-full bg-gradient-to-r from-brand-500 to-emerald-500 transition-all duration-300 ease-out" style="width: 78.4%;"></div>
+              <!-- 80% Benchmark Marker Line -->
+              <div class="absolute top-0 bottom-0 left-[80%] w-0.5 bg-slate-900 z-10" title="80% Readiness Benchmark"></div>
+            </div>
+
+            <div class="relative h-4 text-[11px] font-mono text-slate-400">
+              <span class="absolute left-0">0 (Baseline)</span>
+              <span class="absolute left-[50%] -translate-x-1/2">50</span>
+              <span class="absolute left-[80%] -translate-x-1/2 font-bold text-slate-800">▲ 80.0 Goal</span>
+              <span class="absolute right-0">100</span>
+            </div>
+          </div>
+
+          <!-- Sub-Component Pillar Breakdown Bars -->
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 mt-5 pt-5 border-t border-slate-100">
+            <div class="p-3 rounded-xl bg-slate-50 border border-slate-200/70">
+              <div class="flex justify-between items-center text-xs mb-1.5">
+                <span class="font-medium text-slate-600">Volume Score</span>
+                <span id="pillar-volume" class="font-mono font-bold text-brand-700">76 / 100</span>
+              </div>
+              <div class="h-2 bg-slate-200 rounded-full overflow-hidden">
+                <div id="bar-pillar-volume" class="h-full bg-brand-600 rounded-full transition-all duration-300" style="width: 76%"></div>
+              </div>
+              <p class="text-[11px] text-slate-400 mt-1.5">Diminishing returns &gt; 4.5h/day</p>
+            </div>
+
+            <div class="p-3 rounded-xl bg-slate-50 border border-slate-200/70">
+              <div class="flex justify-between items-center text-xs mb-1.5">
+                <span class="font-medium text-slate-600">Efficiency Score</span>
+                <span id="pillar-efficiency" class="font-mono font-bold text-emerald-700">84 / 100</span>
+              </div>
+              <div class="h-2 bg-slate-200 rounded-full overflow-hidden">
+                <div id="bar-pillar-efficiency" class="h-full bg-emerald-600 rounded-full transition-all duration-300" style="width: 84%"></div>
+              </div>
+              <p class="text-[11px] text-slate-400 mt-1.5">Peaks at 35–45% error review</p>
+            </div>
+
+            <div class="p-3 rounded-xl bg-slate-50 border border-slate-200/70">
+              <div class="flex justify-between items-center text-xs mb-1.5">
+                <span class="font-medium text-slate-600">Calibration Score</span>
+                <span id="pillar-calibration" class="font-mono font-bold text-amber-700">73 / 100</span>
+              </div>
+              <div class="h-2 bg-slate-200 rounded-full overflow-hidden">
+                <div id="bar-pillar-calibration" class="h-full bg-amber-500 rounded-full transition-all duration-300" style="width: 73%"></div>
+              </div>
+              <p class="text-[11px] text-slate-400 mt-1.5">Penalizes 0 or &gt;3.5 tests/wk</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- 4 Calculated Preparation Effort KPI Cards (Clearly Separated from Readiness Index) -->
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
+          <!-- KPI 1: Weekly Effective Practice Hours -->
+          <div class="bg-white rounded-xl border border-slate-200 p-4 shadow-sm">
+            <div class="text-xs font-medium text-slate-500">Weekly Study Volume</div>
+            <div id="kpi-weekly-hours" class="font-mono text-2xl font-bold text-slate-900 mt-1">21.0 hrs</div>
+            <div class="text-[11px] text-slate-400 mt-1">7 days × <span id="kpi-daily-sub">3.0</span>h/day</div>
+          </div>
+
+          <!-- KPI 2: 8-Week Total Practice Hours -->
+          <div class="bg-white rounded-xl border border-slate-200 p-4 shadow-sm">
+            <div class="text-xs font-medium text-slate-500">8-Week Total Hours</div>
+            <div id="kpi-total-hours" class="font-mono text-2xl font-bold text-brand-700 mt-1">168.0 hrs</div>
+            <div class="text-[11px] text-slate-400 mt-1">Cumulative active prep</div>
+          </div>
+
+          <!-- KPI 3: Post-Practice Analysis Time -->
+          <div class="bg-white rounded-xl border border-slate-200 p-4 shadow-sm">
+            <div class="text-xs font-medium text-slate-500">Error Analysis Time</div>
+            <div id="kpi-analysis-hours" class="font-mono text-2xl font-bold text-emerald-700 mt-1">50.4 hrs</div>
+            <div class="text-[11px] text-slate-400 mt-1"><span id="kpi-weekly-analysis">6.3</span> hrs/wk mistake review</div>
+          </div>
+
+          <!-- KPI 4: 8-Week Total Mock & Sectional Tests -->
+          <div class="bg-white rounded-xl border border-slate-200 p-4 shadow-sm">
+            <div class="text-xs font-medium text-slate-500">8-Week Total Tests</div>
+            <div id="kpi-total-tests" class="font-mono text-2xl font-bold text-amber-700 mt-1">16 tests</div>
+            <div class="text-[11px] text-slate-400 mt-1">Mocks + sectionals combined</div>
+          </div>
+        </div>
+
+      </section>
+    </div>
+
+    <!-- Middle Row: Interactive Charts (8-Week Trajectory Line Chart + Time Allocation & Scenario Comparison) -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+
+      <!-- Chart 1: 8-Week Weekly Preparation Trajectory (7 columns) -->
+      <section class="lg:col-span-7 bg-white rounded-2xl border border-slate-200 p-5 sm:p-6 shadow-sm flex flex-col">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4">
+          <div>
+            <h3 class="text-base font-bold text-slate-900">8-Week Readiness Trajectory vs. Benchmark Strategies</h3>
+            <p class="text-xs text-slate-500">Compares your live plan against Low, Moderate (Balanced), and Intensive scenarios across Weeks 1–8.</p>
+          </div>
+          <span class="inline-flex items-center gap-1.5 text-xs font-medium text-slate-600 bg-slate-100 px-2.5 py-1 rounded-lg self-start">
+            <span class="w-2.5 h-0.5 bg-rose-500 inline-block"></span> 80.0 Target Line
+          </span>
+        </div>
+        <div class="relative flex-1 min-h-[280px] sm:min-h-[320px] w-full">
+          <canvas id="trajectoryChart"></canvas>
+        </div>
+      </section>
+
+      <!-- Chart 2: Weekly Time Allocation & Pillar Impact Breakdown (5 columns) -->
+      <section class="lg:col-span-5 bg-white rounded-2xl border border-slate-200 p-5 sm:p-6 shadow-sm flex flex-col justify-between">
+        <div>
+          <h3 class="text-base font-bold text-slate-900">Weekly Study Budget Allocation (Hours)</h3>
+          <p class="text-xs text-slate-500 mb-4">How your <span id="chart-weekly-budget" class="font-semibold text-slate-700">21.0 hrs/week</span> split across new practice, error analysis, and timed tests.</p>
+        </div>
+
+        <div class="relative h-[210px] w-full flex items-center justify-center">
+          <canvas id="allocationChart"></canvas>
+        </div>
+
+        <!-- Allocation Legend Summary -->
+        <div class="grid grid-cols-3 gap-2 mt-4 pt-4 border-t border-slate-100 text-center">
+          <div class="p-2 rounded-lg bg-brand-50/60">
+            <div class="text-[11px] font-medium text-slate-500">New Practice</div>
+            <div id="alloc-practice-hrs" class="font-mono text-sm font-bold text-brand-700 mt-0.5">12.7 hrs</div>
+          </div>
+          <div class="p-2 rounded-lg bg-emerald-50/60">
+            <div class="text-[11px] font-medium text-slate-500">Error Analysis</div>
+            <div id="alloc-analysis-hrs" class="font-mono text-sm font-bold text-emerald-700 mt-0.5">6.3 hrs</div>
+          </div>
+          <div class="p-2 rounded-lg bg-amber-50/60">
+            <div class="text-[11px] font-medium text-slate-500">Timed Tests</div>
+            <div id="alloc-test-hrs" class="font-mono text-sm font-bold text-amber-700 mt-0.5">2.0 hrs</div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- Bottom Row: Scenario Comparison Matrix (Highlighting Balanced Strategy) + Weekly 8-Week Breakdown Table -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+
+      <!-- Scenario Comparison Cards (5 columns) -->
+      <section class="lg:col-span-5 bg-white rounded-2xl border border-slate-200 p-5 sm:p-6 shadow-sm space-y-4">
+        <div>
+          <h3 class="text-base font-bold text-slate-900">Preparation Strategy Comparison</h3>
+          <p class="text-xs text-slate-500">Click any scenario to load its parameters into the simulator.</p>
+        </div>
+
+        <div class="space-y-3">
+          <!-- Scenario 1: Low Preparation -->
+          <div onclick="applyPreset('low')" class="cursor-pointer p-4 rounded-xl border border-slate-200 hover:border-slate-300 bg-slate-50/50 transition">
+            <div class="flex items-center justify-between">
+              <span class="text-sm font-bold text-slate-800">Low Preparation</span>
+              <span id="scen-low-score" class="font-mono text-sm font-bold text-slate-600 bg-slate-200/70 px-2.5 py-0.5 rounded-md">44.2 / 100</span>
+            </div>
+            <div class="text-xs text-slate-500 mt-1 font-mono">1.5 hrs/day • 15% analysis • 0.5 tests/wk</div>
+            <p class="text-xs text-slate-600 mt-2">Insufficient volume and minimal mistake review lead to early plateauing and slow test pacing.</p>
+          </div>
+
+          <!-- Scenario 2: Moderate Preparation (Highlighted Recommended Balanced Strategy) -->
+          <div onclick="applyPreset('moderate')" class="cursor-pointer p-4 rounded-xl border-2 border-emerald-500 bg-emerald-50/40 relative shadow-sm transition hover:bg-emerald-50/70">
+            <div class="flex items-center justify-between gap-2">
+              <div class="flex items-center gap-2">
+                <span class="text-sm font-bold text-emerald-950">Moderate Preparation</span>
+                <span class="px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider bg-emerald-600 text-white rounded-full">
+                  Recommended Balance
+                </span>
+              </div>
+              <span id="scen-mod-score" class="font-mono text-sm font-bold text-emerald-800 bg-emerald-100 px-2.5 py-0.5 rounded-md border border-emerald-300">83.6 / 100</span>
+            </div>
+            <div class="text-xs text-emerald-800 mt-1 font-mono">3.0 hrs/day • 35% analysis • 2.5 tests/wk</div>
+            <p class="text-xs text-emerald-900/90 mt-2">
+              <span class="font-semibold">Why it wins:</span> Fits your 3-hour daily constraint while maximizing learning efficiency (35% error analysis) and exam calibration without burnout.
+            </p>
+          </div>
+
+          <!-- Scenario 3: Intensive Preparation -->
+          <div onclick="applyPreset('intensive')" class="cursor-pointer p-4 rounded-xl border border-slate-200 hover:border-slate-300 bg-slate-50/50 transition">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-2">
+                <span class="text-sm font-bold text-slate-800">Intensive Preparation</span>
+                <span class="px-2 py-0.5 text-[10px] font-semibold bg-amber-100 text-amber-800 rounded-full">Diminishing Returns</span>
+              </div>
+              <span id="scen-int-score" class="font-mono text-sm font-bold text-brand-700 bg-brand-50 px-2.5 py-0.5 rounded-md border border-brand-200">84.9 / 100</span>
+            </div>
+            <div class="text-xs text-slate-500 mt-1 font-mono">5.5 hrs/day • 20% analysis • 4.5 tests/wk</div>
+            <p class="text-xs text-slate-600 mt-2">Requires +83% more daily hours than Moderate, yet yields barely +1.3 extra readiness points due to low error review (20%) and test fatigue.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Weekly 8-Week Progression Table & Transparent Math Formula (7 columns) -->
+      <section class="lg:col-span-7 bg-white rounded-2xl border border-slate-200 p-5 sm:p-6 shadow-sm flex flex-col justify-between space-y-5">
+        <div>
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-3">
+            <div>
+              <h3 class="text-base font-bold text-slate-900">8-Week Cumulative Milestone Breakdown</h3>
+              <p class="text-xs text-slate-500">Click any week row below to inspect its specific action checklist.</p>
+            </div>
+            <span id="selected-week-pill" class="px-2.5 py-1 rounded-lg bg-brand-50 text-brand-700 border border-brand-200 text-xs font-semibold self-start">
+              Inspecting: Week 8 (Final)
+            </span>
+          </div>
+
+          <div class="overflow-x-auto border border-slate-200 rounded-xl">
+            <table class="w-full text-left border-collapse text-xs">
+              <thead>
+                <tr class="bg-slate-50 border-b border-slate-200 text-slate-600 font-semibold">
+                  <th class="py-2.5 px-3">Week</th>
+                  <th class="py-2.5 px-3">Primary Syllabus Focus</th>
+                  <th class="py-2.5 px-3 text-right">Cum. Hours</th>
+                  <th class="py-2.5 px-3 text-right">Analysis Hrs</th>
+                  <th class="py-2.5 px-3 text-right">Cum. Tests</th>
+                  <th class="py-2.5 px-3 text-right">Readiness</th>
+                </tr>
+              </thead>
+              <tbody id="weekly-breakdown-tbody" class="divide-y divide-slate-100 font-mono">
+                <!-- Populated dynamically via JS -->
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Interactive Week Detail Drawer -->
+          <div id="week-detail-box" class="mt-3 p-3 rounded-xl bg-brand-50/60 border border-brand-200/80 text-xs text-slate-700 flex items-center justify-between gap-3">
+            <span id="week-detail-text">Week 8 Goal: Complete final full-length mock calibration and review your top 20 recurring error patterns.</span>
+          </div>
+        </div>
+
+        <!-- Transparent Calculation Formula Accordion / Box -->
+        <div class="p-4 rounded-xl bg-slate-900 text-slate-200 text-xs space-y-2">
+          <div class="flex items-center justify-between">
+            <span class="font-bold text-white uppercase tracking-wider text-[11px]">Transparent Mathematical Model</span>
+            <span class="font-mono text-[11px] text-emerald-400">Live &amp; Deterministic</span>
+          </div>
+          <p class="text-slate-300 leading-relaxed">
+            <span class="text-white font-semibold">1. Input Volume (35% weight):</span> Saturating exponential curve <code class="text-brand-300">100 × (1 - e<sup>-0.48 × Hours</sup>)</code>. Captures strong gains up to 3.5 hrs/day and cognitive fatigue above 4.5 hrs/day.
+          </p>
+          <p class="text-slate-300 leading-relaxed">
+            <span class="text-white font-semibold">2. Learning Efficiency (40% weight):</span> Bell-curved retention multiplier peaking around <code class="text-emerald-300">35–45%</code> Post-Practice Analysis. Low review (&lt;15%) penalizes retention; excessive review (&gt;50%) reduces fresh problem exposure.
+          </p>
+          <p class="text-slate-300 leading-relaxed">
+            <span class="text-white font-semibold">3. Exam Calibration (25% weight):</span> Optimal pacing around <code class="text-amber-300">2.0–3.0 tests/week</code>. Zero tests hurts time management; 4–5 tests/week introduces test fatigue and crowds out concept repair.
+          </p>
+        </div>
+      </section>
+
+    </div>
+
+  </main>
+
+  <!-- Interactive Simulation Logic -->
+  <script>
+    /**
+     * Placement Exam Preparation & Readiness Model
+     * ------------------------------------------------------------------------
+     * Calculates a 0–100 Preparation-Readiness Index over an 8-week horizon
+     * using three orthogonal, non-linear behavioral levers:
+     *   1. Effective Practice Hours / Day (1.0 – 6.0 hrs)
+     *   2. Post-Practice Analysis Ratio (10% – 60%)
+     *   3. Weekly Mock + Sectional Test Frequency (0.0 – 5.0 tests/wk)
+     */
+
+    const INITIAL_STATE = {
+      hours: 3.0,
+      analysis: 30,
+      mocks: 2.0
+    };
+
+    const PRESETS = {
+      initial: { hours: 3.0, analysis: 30, mocks: 2.0 },
+      low: { hours: 1.5, analysis: 15, mocks: 0.5 },
+      moderate: { hours: 3.0, analysis: 35, mocks: 2.5 },
+      intensive: { hours: 5.5, analysis: 20, mocks: 4.5 }
+    };
+
+    const SECTION_NOTES = {
+      all: { label: "All 4 Sections Balanced", note: "Equal weekly rotation across Quant Aptitude, Logical Reasoning, Verbal, and Core Technical." },
+      aptitude: { label: "Quant & Speed Priority", note: "Allocates 40% of practice hours to arithmetic shortcuts, percentages, and timed numerical drills." },
+      logical: { label: "LR & DI Pattern Priority", note: "Focuses on puzzles, seating arrangements, and data interpretation sets under strict timers." },
+      technical: { label: "DSA & CS Core Priority", note: "Prioritizes coding problems, DBMS/OS/CN concepts, and post-test debugging analysis." }
+    };
+
+    const WEEK_ACTION_TIPS = [
+      "Week 1 Action: Establish daily study routine, benchmark baseline speed, and start your mistake logbook.",
+      "Week 2 Action: Master core Logical Reasoning & DI templates; re-solve 100% of Week 1 missed questions.",
+      "Week 3 Action: Deep-dive into Technical CS fundamentals & coding patterns while maintaining daily quant drills.",
+      "Week 4 Action: Mid-point checkpoint—take a full-length diagnostic mock and audit weak topic clusters.",
+      "Week 5 Action: Shift to timed sectional tests to eliminate negative marking and slow question traps.",
+      "Week 6 Action: Increase full-length mock simulation; spend at least 35% of study hours dissecting errors.",
+      "Week 7 Action: High-difficulty technical & aptitude edge cases; refine time allocation per exam section.",
+      "Week 8 Action: Final exam simulation, light revision of your error logbook, and pre-exam stamina taper."
+    ];
+
+    let selectedWeek = 8;
+    let selectedSection = 'all';
+
+    const SYLLABUS_PHASES = [
+      "Aptitude Foundations & Quant Speed",
+      "Logical Reasoning & Data Interpretation",
+      "Technical Core (DSA / CS Fundamentals)",
+      "Verbal Ability & Mid-Point Consolidation",
+      "Mixed Sectional Timing & Weak-Area Repair",
+      "Full-Length Mock Calibration & Error Drills",
+      "High-Difficulty Technical & Accuracy Push",
+      "Final Exam Simulation & Stamina Taper"
+    ];
+
+    let trajectoryChart = null;
+    let allocationChart = null;
+
+    /**
+     * Core transparent calculation engine.
+     * Returns pillar scores, final 8-week readiness index, and weekly trajectory.
+     */
+    function calculateModel(hours, analysisPct, mocksPerWeek) {
+      // Handle complete zero state cleanly
+      if (hours === 0 && analysisPct === 0 && mocksPerWeek === 0) {
+        const zeroTable = SYLLABUS_PHASES.map((focus, idx) => ({
+          week: idx + 1,
+          focus,
+          cumHours: "0.0",
+          cumAnalysis: "0.0",
+          cumTests: 0,
+          readiness: "0.0"
+        }));
+        return {
+          volumeScore: 0,
+          efficiencyScore: 0,
+          calibrationScore: 0,
+          readinessIndex: 0.0,
+          weeklyHours: 0,
+          totalHours: 0,
+          weeklyAnalysisHrs: 0,
+          totalAnalysisHrs: 0,
+          weeklyTestHrs: 0,
+          weeklyNewPracticeHrs: 0,
+          totalTests: 0,
+          weeklySeries: Array(8).fill(0),
+          weeklyTable: zeroTable
+        };
+      }
+
+      // 1. Input Volume Score (0 - 100)
+      // Uses saturating exponential curve to reflect diminishing marginal returns at high daily hours.
+      const rawVolume = hours === 0 ? 0 : 100 * (1 - Math.exp(-0.48 * hours));
+      const burnoutPenalty = hours > 4.5 ? (hours - 4.5) * 3.5 : 0;
+      const volumeScore = Math.max(0, Math.min(100, rawVolume - burnoutPenalty));
+
+      // 2. Learning Efficiency Score (0 - 100)
+      let efficiencyScore;
+      if (analysisPct === 0) {
+        efficiencyScore = 0;
+      } else if (analysisPct <= 38) {
+        const normalized = analysisPct / 38;
+        efficiencyScore = 15 + 81 * Math.pow(normalized, 0.72);
+      } else {
+        const excess = (analysisPct - 38) / 22;
+        efficiencyScore = 96 - 16 * Math.pow(excess, 1.3);
+      }
+      efficiencyScore = Math.max(0, Math.min(100, efficiencyScore));
+
+      // 3. Exam Calibration Score (0 - 100)
+      let calibrationScore;
+      if (mocksPerWeek === 0) {
+        calibrationScore = 0;
+      } else if (mocksPerWeek <= 2.75) {
+        const norm = mocksPerWeek / 2.75;
+        calibrationScore = 18 + 77 * Math.pow(norm, 0.68);
+      } else {
+        const excessTests = mocksPerWeek - 2.75;
+        calibrationScore = 95 - excessTests * 7.5;
+      }
+      calibrationScore = Math.max(0, Math.min(100, calibrationScore));
+
+      // Interaction Penalty: High study hours paired with very low mistake analysis (<20%)
+      let illusionDrag = 0;
+      if (hours >= 3.5 && analysisPct < 20) {
+        illusionDrag = (hours - 3.0) * ((20 - analysisPct) * 0.25);
+      }
+
+      // Weighted Composite 8-Week Readiness Index
+      const targetReadiness = Math.max(
+        0,
+        Math.min(100, (0.35 * volumeScore) + (0.40 * efficiencyScore) + (0.25 * calibrationScore) - illusionDrag)
+      );
+
+      // Baseline starts at 28.0 only if active preparation > 0, else scales smoothly from 0
+      const activityFactor = Math.min(1, (hours / 1.5) * 0.6 + (analysisPct > 0 ? 0.2 : 0) + (mocksPerWeek > 0 ? 0.2 : 0));
+      const baseline = 28.0 * activityFactor;
+      const weeklySeries = [];
+      const weeklyTable = [];
+
+      const weeklyHours = hours * 7;
+      const weeklyAnalysisHrs = weeklyHours * (analysisPct / 100);
+      const weeklyTestHrs = Math.min(weeklyHours * 0.45, mocksPerWeek * 1.25);
+      const weeklyNewPracticeHrs = Math.max(0, weeklyHours - weeklyAnalysisHrs - weeklyTestHrs);
+
+      const curvePower = 0.88 - ((efficiencyScore - 50) / 250);
+
+      for (let w = 1; w <= 8; w++) {
+        const progressFraction = Math.pow(w / 8, Math.max(0.62, Math.min(1.15, curvePower)));
+        const weekReadiness = baseline + (targetReadiness - baseline) * progressFraction;
+        weeklySeries.push(Number(weekReadiness.toFixed(1)));
+
+        weeklyTable.push({
+          week: w,
+          focus: SYLLABUS_PHASES[w - 1],
+          cumHours: (weeklyHours * w).toFixed(1),
+          cumAnalysis: (weeklyAnalysisHrs * w).toFixed(1),
+          cumTests: Math.round(mocksPerWeek * w),
+          readiness: weekReadiness.toFixed(1)
+        });
+      }
+
+      return {
+        volumeScore: Math.round(volumeScore),
+        efficiencyScore: Math.round(efficiencyScore),
+        calibrationScore: Math.round(calibrationScore),
+        readinessIndex: Number(targetReadiness.toFixed(1)),
+        weeklyHours,
+        totalHours: weeklyHours * 8,
+        weeklyAnalysisHrs,
+        totalAnalysisHrs: weeklyAnalysisHrs * 8,
+        weeklyTestHrs,
+        weeklyNewPracticeHrs,
+        totalTests: Math.round(mocksPerWeek * 8),
+        weeklySeries,
+        weeklyTable
+      };
+    }
+
+    /**
+     * Generates context-aware coaching feedback for each slider and overall plan.
+     */
+    function updateQualitativeFeedback(hours, analysis, mocks, result) {
+      const fbHours = document.getElementById('feedback-hours');
+      const fbAnalysis = document.getElementById('feedback-analysis');
+      const fbMocks = document.getElementById('feedback-mocks');
+      const diagText = document.getElementById('diagnostic-text');
+      const badge = document.getElementById('active-strategy-badge');
+
+      // Hours feedback
+      if (hours === 0) {
+        fbHours.textContent = "Zero study hours selected. Drag the slider above 0h or choose a preset to simulate your 8-week growth.";
+      } else if (hours < 2.5) {
+        fbHours.textContent = "Low daily volume. Covering all 4 exam sections (Aptitude, LR, Verbal, Tech) in 8 weeks will be tight.";
+      } else if (hours <= 4.0) {
+        fbHours.textContent = "Optimal cognitive focus window. Sustains high active problem-solving across Aptitude & Tech without burnout.";
+      } else {
+        fbHours.textContent = "Diminishing returns zone: beyond 4.5 hrs/day, mental fatigue lowers problem-solving retention per hour.";
+      }
+
+      // Analysis feedback
+      if (analysis === 0) {
+        fbAnalysis.textContent = "Zero error review: solving questions without analyzing mistakes prevents long-term retention.";
+      } else if (analysis < 20) {
+        fbAnalysis.textContent = "Warning: Low mistake review (<20%). Solving many questions without dissecting errors causes repeat mistakes.";
+      } else if (analysis <= 45) {
+        fbAnalysis.textContent = "High-leverage learning zone: actively logging errors and re-solving missed problems compounds retention.";
+      } else {
+        fbAnalysis.textContent = "Heavy review ratio (>45%): ensure you still leave enough hours for fresh unseen practice problems.";
+      }
+
+      // Mocks feedback
+      if (mocks === 0) {
+        fbMocks.textContent = "Zero timed tests: exam pacing, stamina, and negative-marking control remain completely uncalibrated.";
+      } else if (mocks < 1) {
+        fbMocks.textContent = "Low test calibration: consider taking at least 1–2 sectional or mock tests per week to build speed.";
+      } else if (mocks <= 3) {
+        fbMocks.textContent = "Balanced calibration: builds sectional pacing and exam stamina while preserving study days for gap repair.";
+      } else {
+        fbMocks.textContent = "High test frequency (>3/wk): frequent testing can cause fatigue and reduce time needed to fix weak concepts.";
+      }
+
+      // Highlight matching preset button
+      document.querySelectorAll('.preset-btn').forEach(btn => btn.classList.remove('ring-2', 'ring-offset-1', 'ring-brand-500'));
+
+      if (hours === 0 && analysis === 0 && mocks === 0) {
+        badge.textContent = "Reset (Zero Baseline)";
+        badge.className = "px-2.5 py-0.5 rounded-full text-xs font-semibold bg-slate-200 text-slate-700 border border-slate-300";
+      } else if (hours === 3.0 && analysis === 30 && mocks === 2.0) {
+        badge.textContent = "Initial Plan (3h/day)";
+        badge.className = "px-2.5 py-0.5 rounded-full text-xs font-semibold bg-brand-50 text-brand-700 border border-brand-200";
+        document.getElementById('btn-preset-initial')?.classList.add('ring-2', 'ring-offset-1', 'ring-brand-500');
+      } else if (hours === 1.5 && analysis === 15 && mocks === 0.5) {
+        badge.textContent = "Preset: Low Prep";
+        badge.className = "px-2.5 py-0.5 rounded-full text-xs font-semibold bg-slate-100 text-slate-700 border border-slate-300";
+        document.getElementById('btn-preset-low')?.classList.add('ring-2', 'ring-offset-1', 'ring-brand-500');
+      } else if (hours === 3.0 && analysis === 35 && mocks === 2.5) {
+        badge.textContent = "Recommended: Balanced";
+        badge.className = "px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-300";
+        document.getElementById('btn-preset-moderate')?.classList.add('ring-2', 'ring-offset-1', 'ring-emerald-500');
+      } else if (hours === 5.5 && analysis === 20 && mocks === 4.5) {
+        badge.textContent = "Preset: Intensive";
+        badge.className = "px-2.5 py-0.5 rounded-full text-xs font-semibold bg-amber-50 text-amber-800 border border-amber-300";
+        document.getElementById('btn-preset-intensive')?.classList.add('ring-2', 'ring-offset-1', 'ring-amber-500');
+      } else {
+        badge.textContent = "Custom Strategy";
+        badge.className = "px-2.5 py-0.5 rounded-full text-xs font-semibold bg-brand-50 text-brand-700 border border-brand-200";
+      }
+
+      // Diagnostic coaching insight
+      if (hours === 0 && analysis === 0 && mocks === 0) {
+        diagText.textContent = "All levers are reset to 0. Move any slider or click 'Moderate (Balanced)' in the top bar to see how your 8-week readiness compounds.";
+      } else if (result.readinessIndex >= 80) {
+        diagText.textContent = `Target Achieved (${result.readinessIndex}/100): Your balance of active volume, ${analysis}% error analysis, and ${mocks} weekly tests positions you strongly for an 80%+ placement outcome.`;
+      } else if (analysis < 25) {
+        diagText.textContent = `Efficiency Bottleneck: Raising your Post-Practice Analysis Ratio from ${analysis}% to 35% is the fastest way to boost readiness without adding study hours.`;
+      } else if (mocks < 1.5) {
+        diagText.textContent = `Calibration Gap: Adding 1–2 weekly timed sectional or mock tests will sharpen speed and push your Readiness Index closer to 80.0.`;
+      } else {
+        const gap = (80 - result.readinessIndex).toFixed(1);
+        diagText.textContent = `You are ${gap} points shy of the 80.0 benchmark. Try nudging Error Analysis to 35% or Weekly Tests to 2.5 to close the gap efficiently.`;
+      }
+    }
+
+    /**
+     * Updates visual slider track fill percentage for instant tactile feedback.
+     */
+    function updateSliderVisualFill(sliderEl) {
+      const min = parseFloat(sliderEl.min) || 0;
+      const max = parseFloat(sliderEl.max) || 100;
+      const val = parseFloat(sliderEl.value) || 0;
+      const pct = ((val - min) / (max - min)) * 100;
+      sliderEl.style.setProperty('--fill-pct', `${pct}%`);
+    }
+
+    /**
+     * Helper to set a single slider by clicking its scale labels.
+     */
+    function setSlider(id, value) {
+      const el = document.getElementById(id);
+      if (!el) return;
+      el.value = value;
+      updateDashboard();
+    }
+
+    /**
+     * Interactive section selector.
+     */
+    function selectSection(secKey) {
+      selectedSection = secKey;
+      document.querySelectorAll('.sec-btn').forEach(btn => {
+        if (btn.dataset.sec === secKey) {
+          btn.className = "sec-btn px-2 py-1.5 rounded-lg text-[11px] font-semibold bg-brand-600 text-white shadow-sm transition";
+        } else {
+          btn.className = "sec-btn px-2 py-1.5 rounded-lg text-[11px] font-medium bg-white text-slate-600 border border-slate-200 hover:bg-slate-100 transition";
+        }
+      });
+      const info = SECTION_NOTES[secKey];
+      document.getElementById('section-focus-tip').textContent = info.label;
+      document.getElementById('diagnostic-text').textContent = info.note;
+    }
+
+    /**
+     * Interactive week row inspector.
+     */
+    function inspectWeek(weekNum) {
+      selectedWeek = weekNum;
+      document.getElementById('selected-week-pill').textContent = `Inspecting: Week ${weekNum}`;
+      document.getElementById('week-detail-text').textContent = WEEK_ACTION_TIPS[weekNum - 1];
+      updateDashboard();
+    }
+
+    /**
+     * Initializes Chart.js instances on page load.
+     */
+    function initCharts(initialData, lowData, modData, intData) {
+      const ctxTraj = document.getElementById('trajectoryChart').getContext('2d');
+      const weeksLabels = ['Week 1', 'Week 2', 'Week 3', 'Week 4', 'Week 5', 'Week 6', 'Week 7', 'Week 8'];
+
+      trajectoryChart = new Chart(ctxTraj, {
+        type: 'line',
+        data: {
+          labels: weeksLabels,
+          datasets: [
+            {
+              label: 'Your Active Plan',
+              data: initialData.weeklySeries,
+              borderColor: '#4f46e5',
+              backgroundColor: 'rgba(79, 70, 229, 0.12)',
+              borderWidth: 3.5,
+              pointRadius: 4.5,
+              pointHoverRadius: 6,
+              pointBackgroundColor: '#4f46e5',
+              fill: true,
+              tension: 0.32
+            },
+            {
+              label: 'Moderate (Recommended)',
+              data: modData.weeklySeries,
+              borderColor: '#10b981',
+              borderWidth: 2,
+              borderDash: [5, 5],
+              pointRadius: 0,
+              pointHoverRadius: 4,
+              fill: false,
+              tension: 0.32
+            },
+            {
+              label: 'Intensive Prep',
+              data: intData.weeklySeries,
+              borderColor: '#f59e0b',
+              borderWidth: 1.8,
+              borderDash: [3, 3],
+              pointRadius: 0,
+              pointHoverRadius: 4,
+              fill: false,
+              tension: 0.32
+            },
+            {
+              label: 'Low Prep',
+              data: lowData.weeklySeries,
+              borderColor: '#94a3b8',
+              borderWidth: 1.8,
+              borderDash: [4, 4],
+              pointRadius: 0,
+              pointHoverRadius: 4,
+              fill: false,
+              tension: 0.32
+            },
+            {
+              label: '80.0 Target Benchmark',
+              data: Array(8).fill(80),
+              borderColor: '#f43f5e',
+              borderWidth: 1.5,
+              pointRadius: 0,
+              pointHoverRadius: 0,
+              fill: false
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          interaction: {
+            mode: 'index',
+            intersect: false
+          },
+          plugins: {
+            legend: {
+              position: 'bottom',
+              labels: {
+                usePointStyle: true,
+                boxWidth: 8,
+                padding: 14,
+                font: { family: 'Inter', size: 11, weight: '500' }
+              }
+            },
+            tooltip: {
+              backgroundColor: '#0f172a',
+              titleFont: { family: 'Inter', size: 12, weight: '700' },
+              bodyFont: { family: 'JetBrains Mono', size: 11 },
+              padding: 10,
+              cornerRadius: 8
+            }
+          },
+          scales: {
+            y: {
+              min: 0,
+              max: 100,
+              grid: { color: '#f1f5f9' },
+              ticks: {
+                font: { family: 'JetBrains Mono', size: 11 },
+                color: '#64748b'
+              },
+              title: {
+                display: true,
+                text: 'Readiness Index (0–100)',
+                font: { family: 'Inter', size: 11, weight: '600' },
+                color: '#475569'
+              }
+            },
+            x: {
+              grid: { display: false },
+              ticks: {
+                font: { family: 'Inter', size: 11, weight: '500' },
+                color: '#64748b'
+              }
+            }
+          }
+        }
+      });
+
+      // Doughnut Chart for Weekly Time Allocation
+      const ctxAlloc = document.getElementById('allocationChart').getContext('2d');
+      allocationChart = new Chart(ctxAlloc, {
+        type: 'doughnut',
+        data: {
+          labels: ['New Active Practice', 'Post-Practice Error Analysis', 'Timed Mocks & Sectionals', 'Unallocated'],
+          datasets: [{
+            data: [
+              Number(initialData.weeklyNewPracticeHrs.toFixed(1)),
+              Number(initialData.weeklyAnalysisHrs.toFixed(1)),
+              Number(initialData.weeklyTestHrs.toFixed(1)),
+              0
+            ],
+            backgroundColor: ['#4f46e5', '#10b981', '#f59e0b', '#e2e8f0'],
+            borderWidth: 2,
+            borderColor: '#ffffff',
+            hoverOffset: 4
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          cutout: '66%',
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              backgroundColor: '#0f172a',
+              bodyFont: { family: 'JetBrains Mono', size: 11 },
+              callbacks: {
+                label: (ctx) => ` ${ctx.label}: ${ctx.parsed} hrs/wk`
+              }
+            }
+          }
+        }
+      });
+    }
+
+    /**
+     * Master UI refresh triggered whenever any slider or preset changes.
+     */
+    function updateDashboard() {
+      const hoursEl = document.getElementById('slider-hours');
+      const analysisEl = document.getElementById('slider-analysis');
+      const mocksEl = document.getElementById('slider-mocks');
+
+      updateSliderVisualFill(hoursEl);
+      updateSliderVisualFill(analysisEl);
+      updateSliderVisualFill(mocksEl);
+
+      const hours = parseFloat(hoursEl.value);
+      const analysis = parseInt(analysisEl.value, 10);
+      const mocks = parseFloat(mocksEl.value);
+
+      // Update slider numeric pills
+      document.getElementById('val-hours').textContent = `${hours.toFixed(1)} hrs/day`;
+      document.getElementById('val-analysis').textContent = `${analysis}%`;
+      document.getElementById('val-mocks').textContent = `${mocks.toFixed(1)} tests/wk`;
+
+      // Run calculations
+      const res = calculateModel(hours, analysis, mocks);
+
+      // Update Hero Readiness Score & Progress Bar
+      document.getElementById('kpi-readiness-score').textContent = res.readinessIndex.toFixed(1);
+      const bar = document.getElementById('readiness-progress-bar');
+      bar.style.width = `${res.readinessIndex}%`;
+
+      const statusLabel = document.getElementById('target-status-label');
+      if (res.readinessIndex >= 80) {
+        const surplus = (res.readinessIndex - 80).toFixed(1);
+        statusLabel.textContent = `+${surplus} pts above 80.0 target ✓`;
+        statusLabel.className = "font-mono text-emerald-600 font-bold";
+        bar.className = "h-full rounded-full bg-gradient-to-r from-emerald-500 to-teal-500 transition-all duration-300 ease-out";
+      } else {
+        const deficit = (80 - res.readinessIndex).toFixed(1);
+        statusLabel.textContent = `-${deficit} pts below 80.0 target`;
+        statusLabel.className = "font-mono text-amber-600 font-semibold";
+        bar.className = "h-full rounded-full bg-gradient-to-r from-brand-500 to-indigo-400 transition-all duration-300 ease-out";
+      }
+
+      // Update Pillar Sub-Bars
+      document.getElementById('pillar-volume').textContent = `${res.volumeScore} / 100`;
+      document.getElementById('bar-pillar-volume').style.width = `${res.volumeScore}%`;
+
+      document.getElementById('pillar-efficiency').textContent = `${res.efficiencyScore} / 100`;
+      document.getElementById('bar-pillar-efficiency').style.width = `${res.efficiencyScore}%`;
+
+      document.getElementById('pillar-calibration').textContent = `${res.calibrationScore} / 100`;
+      document.getElementById('bar-pillar-calibration').style.width = `${res.calibrationScore}%`;
+
+      // Update 4 Effort KPI Cards
+      document.getElementById('kpi-weekly-hours').textContent = `${res.weeklyHours.toFixed(1)} hrs`;
+      document.getElementById('kpi-daily-sub').textContent = hours.toFixed(1);
+      document.getElementById('kpi-total-hours').textContent = `${res.totalHours.toFixed(1)} hrs`;
+      document.getElementById('kpi-analysis-hours').textContent = `${res.totalAnalysisHrs.toFixed(1)} hrs`;
+      document.getElementById('kpi-weekly-analysis').textContent = res.weeklyAnalysisHrs.toFixed(1);
+      document.getElementById('kpi-total-tests').textContent = `${res.totalTests} tests`;
+
+      // Update Weekly Budget Allocation Summary
+      document.getElementById('chart-weekly-budget').textContent = `${res.weeklyHours.toFixed(1)} hrs/week`;
+      document.getElementById('alloc-practice-hrs').textContent = `${res.weeklyNewPracticeHrs.toFixed(1)} hrs`;
+      document.getElementById('alloc-analysis-hrs').textContent = `${res.weeklyAnalysisHrs.toFixed(1)} hrs`;
+      document.getElementById('alloc-test-hrs').textContent = `${res.weeklyTestHrs.toFixed(1)} hrs`;
+
+      // Update 8-Week Breakdown Table (clickable rows)
+      const tbody = document.getElementById('weekly-breakdown-tbody');
+      tbody.innerHTML = res.weeklyTable.map(row => {
+        const isGoalMet = parseFloat(row.readiness) >= 80;
+        const isSelected = row.week === selectedWeek;
+        const badgeClass = isGoalMet
+          ? 'bg-emerald-100 text-emerald-800 font-bold'
+          : 'bg-slate-100 text-slate-700';
+        const rowBg = isSelected ? 'bg-brand-50/70' : 'hover:bg-slate-50/80';
+        return `
+          <tr onclick="inspectWeek(${row.week})" class="cursor-pointer ${rowBg} transition">
+            <td class="py-2 px-3 font-semibold text-slate-800">W${row.week}</td>
+            <td class="py-2 px-3 font-sans text-slate-600">${row.focus}</td>
+            <td class="py-2 px-3 text-right text-slate-700">${row.cumHours}h</td>
+            <td class="py-2 px-3 text-right text-emerald-700">${row.cumAnalysis}h</td>
+            <td class="py-2 px-3 text-right text-amber-700">${row.cumTests}</td>
+            <td class="py-2 px-3 text-right">
+              <span class="px-2 py-0.5 rounded ${badgeClass}">${row.readiness}</span>
+            </td>
+          </tr>
+        `;
+      }).join('');
+
+      // Update Qualitative Coaching Feedback
+      updateQualitativeFeedback(hours, analysis, mocks, res);
+
+      // Update Charts Live
+      if (trajectoryChart) {
+        trajectoryChart.data.datasets[0].data = res.weeklySeries;
+        trajectoryChart.update('none');
+      }
+      if (allocationChart) {
+        const isAllZero = res.weeklyHours === 0;
+        allocationChart.data.datasets[0].data = isAllZero
+          ? [0, 0, 0, 1]
+          : [
+              Number(res.weeklyNewPracticeHrs.toFixed(1)),
+              Number(res.weeklyAnalysisHrs.toFixed(1)),
+              Number(res.weeklyTestHrs.toFixed(1)),
+              0
+            ];
+        allocationChart.update('none');
+      }
+    }
+
+    /**
+     * Applies Initial, Low, Moderate, or Intensive presets.
+     */
+    function applyPreset(key) {
+      const preset = PRESETS[key];
+      if (!preset) return;
+      document.getElementById('slider-hours').value = preset.hours;
+      document.getElementById('slider-analysis').value = preset.analysis;
+      document.getElementById('slider-mocks').value = preset.mocks;
+      updateDashboard();
+    }
+
+    /**
+     * Resets all sliders cleanly to 0 (0.0 hrs/day, 0%, 0.0 tests/wk).
+     */
+    function resetToZero() {
+      document.getElementById('slider-hours').value = 0;
+      document.getElementById('slider-analysis').value = 0;
+      document.getElementById('slider-mocks').value = 0;
+      updateDashboard();
+    }
+
+    // Bootstrap on window load
+    window.addEventListener('DOMContentLoaded', () => {
+      const initData = calculateModel(INITIAL_STATE.hours, INITIAL_STATE.analysis, INITIAL_STATE.mocks);
+      const lowData = calculateModel(PRESETS.low.hours, PRESETS.low.analysis, PRESETS.low.mocks);
+      const modData = calculateModel(PRESETS.moderate.hours, PRESETS.moderate.analysis, PRESETS.moderate.mocks);
+      const intData = calculateModel(PRESETS.intensive.hours, PRESETS.intensive.analysis, PRESETS.intensive.mocks);
+
+      // Populate static scenario comparison badges with exact model outputs
+      document.getElementById('scen-low-score').textContent = `${lowData.readinessIndex.toFixed(1)} / 100`;
+      document.getElementById('scen-mod-score').textContent = `${modData.readinessIndex.toFixed(1)} / 100`;
+      document.getElementById('scen-int-score').textContent = `${intData.readinessIndex.toFixed(1)} / 100`;
+
+      initCharts(initData, lowData, modData, intData);
+      updateDashboard();
+
+      // Attach real-time input listeners to all three sliders
+      ['slider-hours', 'slider-analysis', 'slider-mocks'].forEach(id => {
+        document.getElementById(id).addEventListener('input', updateDashboard);
+      });
+    });
+  </script>
+</body>
+</html>
